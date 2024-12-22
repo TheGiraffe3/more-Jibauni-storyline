@@ -17,7 +17,7 @@ mission "Jibauni: Escorts Begin"
 	description "Kanlanmo has contacted you and asked you to pick up some Jibauni ships on <planet>, then report to him on Baitoon."
 	source
 		government "Jibauni" "Jibauni (Rebel)"
-	destination Taltahard
+	destination "Taltahard"
 	to offer
 		not "not working with jibauni"
 		has "event: jibauni gather fleet against rebels"
@@ -39,8 +39,8 @@ mission "Jibauni: Escorts 0"
 	landing
 	name "Ships to <planet>"
 	description "Kanlanmo has contacted you and asked you to pick up some Jibauni ships on <origin>, then report to him on <planet>."
-	source Taltahard
-	destination Baitoon
+	source "Taltahard"
+	destination "Baitoon"
 	passengers 1
 	blocked "You do not have one bunk free. Come back later when there is more space on your ship."
 	to offer
@@ -68,7 +68,6 @@ mission "Jibauni: Escorts 0"
 	npc accompany save
 		government Jibauni
 		personality
-			confusion 10
 			disables
 			escort
 			frugal
@@ -121,9 +120,9 @@ mission "Jibauni: Escorts 0"
 mission "Jibauni: Escorts 1 out"
 	name "Get ships from <planet>"
 	description "Pick up some more ships, from <planet>, them come back to <origin>."
-	source Baitoon
-	destination Kanlil
-	deadline 3
+	source "Baitoon"
+	destination "Kanlil"
+	deadline
 	to offer
 		has "Jibauni Escorts 0: done"
 	on offer
@@ -139,4 +138,141 @@ mission "Jibauni: Escorts 1 out"
 	on accept
 		"salary: Jibauni" = 200
 	on complete
-		dialog `What seems to be the captain of the fleet you will be escorting shows up on your viewpanel. "Meet me in the spaceport," they say. "As soon as possible!"`
+		dialog `What seems to be the captain of the fleet you will be escorting shows up on your viewpanel. "Meet me in the spaceport," he says. "As soon as possible!"`
+
+mission "Jibauni: Escorts 2"
+	landing
+	name "Defend <planet>"
+	description "The Rebel Jibauni are attacking <destination>. Fight and drive them off, then land and receive instructions."
+	source "Kanlil"
+	destination "Baitoon"
+	deadline 7
+	to offer
+		has "Jibauni: Escorts 1 out: done"
+	on offer
+		conversation
+			`However, before you have a chance to disembark, the same captain hurries up to <ship> and shouts. The horror-filled words reach your ears, "<planet> is under attack by a Rebel force! We have to get there immediately!" You prepare to take off, followed by a number of other Jibauni ships.`
+				launch
+	on visit
+		conversation
+			branch alreadyvisited
+				has "jibauni: visited when the rebels attack baitoon"
+			label notvisited
+			action
+				set "jibauni: visited when the rebels attack baitoon"
+			`A group of Jibauni hurries up and asks, "Are the Rebel Jibauni defeated yet?" You must tell them the answer, no, and they force you to leave again and disable the Rebels.`
+				depart
+			label alreadyvisited
+			action
+				"reputation: Jibauni" --
+			`The same group arrives asking the same question. When they hear the answer, you are again made to leave, amid mutterings from the angry Jibauni.`
+	on complete
+		"salary: Jibauni" = 800
+		conversation
+			`As you land, a Larajal appears, and out of it steps Kanlanmo. "Hello there, <first>!" he says in jubilant tones. "I hear that the Rebels have been defeated, largely thanks to you. Well, thank you!"`
+			choice
+				`	"It was my pleasure."`
+				`	"How did the Rebel Jibauni get such a large fleet in without anyone noticing?"`
+			# DRAFT
+	npc
+		government Jibauni
+		personality
+			disables
+			escort
+			frugal
+			heroic
+			launching
+			merciful
+			opportunistic
+		fleet
+			names "jibauni military"
+			cargo 0
+			variant
+				"Nathar" 2
+				"Larajal" 2
+				"Muraw" 2
+				"Yiyharsi" 2
+				"Furus" 3
+				"Saghir"
+	npc
+		government Jibauni
+		system Huyya
+		personality
+			disables
+			escort
+			frugal
+			heroic
+			merciful
+			opportunistic
+			staying
+		ship "Nathar" "Hirrih"
+		ship "Muraw (Fighting)" "Hirrih 1"
+		ship "Muraw (Fighting)" "Hirrih 2"
+		ship "Muraw (Fighting)" "Hirrih 3"
+		ship "Muraw" "Hirrih 4"
+		ship "Nakil" "Winner of Victory"
+		ship "Larajal" "Winner 1"
+		ship "Larajal" "Winner 2"
+		ship "Muraw" "Winner 3"
+		ship "Muraw" "Winner 4"
+		ship "Latbaliday" "Winner 5"
+		ship "Latbaliday" "Winner 6"
+		ship "Duntay" "Winner 7"
+		ship "Duntay" "Winner 8"
+		ship "Duntay" "Winner 9"
+		ship "Duntay" "Winner 10"
+		ship "Yiyharsi" "Nabal"
+		ship "Yiyharsi" "Yabal"
+		ship "Yiyharsi" "Labal"
+		ship "Yiyharsi" "Dabal"
+		ship "Yiyharsi" "Mabal"
+		ship "Furus" "Sinsin"
+		ship "Furus" "Binbin"
+		ship "Furus" "Minmin"
+		ship "Furus" "Linlin"
+	npc
+		government "Jibauni"
+		system Huyya
+		personality
+			derelict
+			disables
+			escort
+			frugal
+			heroic
+			merciful
+			opportunistic
+			staying
+		fleet
+			names "jibauni military"
+			variant
+				"Nathar"
+				"Latbaliday"
+	npc disable
+		government "Jibauni (Rebel)"
+		system Huyya
+		personality
+			heroic
+			opportunistic
+			staying
+		fleet
+			names "rebel jibauni military"
+			cargo 0
+			variant
+				"Nathar" 4
+				"Latbaliday" 6
+				"Muraw" 2
+				"Yiyharsi" 7
+				"Saghir" 6
+	npc
+		government "Jibauni (Rebel)"
+		system Huyya
+		personality
+			derelict
+			heroic
+			staying
+		fleet
+			names "rebel jibauni military"
+			variant
+				"Nakil"
+				"Duntay" 3
+				"Larajal"
